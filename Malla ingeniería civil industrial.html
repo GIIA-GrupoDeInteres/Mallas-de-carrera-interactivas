@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malla Curricular - Ingeniería Civil Industrial</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #2a4a7c, #3a6a9c);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            padding: 30px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #1a2a6c;
+        }
+
+        h1 {
+            color: #1a2a6c;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        h2 {
+            color: #2a4a7c;
+            font-size: 1.8rem;
+            font-weight: 500;
+        }
+
+        .disclaimer {
+            background: #ffeb3b;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            display: inline-block;
+            color: #333;
+        }
+
+        .malla-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .anio-col {
+            background: #f5f7fa;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .anio-col:hover {
+            transform: translateY(-5px);
+        }
+
+        .anio-title {
+            background: #1a2a6c;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .semestre {
+            margin-bottom: 20px;
+        }
+
+        .semestre-title {
+            background: #2a4a7c;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .ramo {
+            background: white;
+            border-left: 4px solid #3a6a9c;
+            margin-bottom: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .ramo:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .ramo-header {
+            padding: 12px 15px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 500;
+            background: #f0f4f8;
+        }
+
+        .ramo-header:hover {
+            background: #e1e8f0;
+        }
+
+        .ramo-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .ramo.open .ramo-icon {
+            transform: rotate(180deg);
+        }
+
+        .ramo-content {
+            padding: 0 15px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease, padding 0.3s ease;
+            background: #f9fbfd;
+        }
+
+        .ramo.open .ramo-content {
+            padding: 15px;
+            max-height: 500px;
+        }
+
+        .ramo-descripcion {
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: #555;
+        }
+
+        .profesores {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed #ccc;
+        }
+
+        .profesores-titulo {
+            font-weight: 600;
+            color: #2a4a7c;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        .profesor {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+            font-size: 0.85rem;
+        }
+
+        .profesor i {
+            margin-right: 8px;
+            color: #3a6a9c;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        button {
+            background: #1a2a6c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        button:hover {
+            background: #2a4a7c;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 1200px) {
+            .malla-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .malla-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .malla-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Ingeniería Civil Industrial</h1>
+            <h2>Facultad de Ingeniería</h2>
+            <div class="disclaimer">Información referencial. Podría ser modificada.</div>
+        </header>
+
+        <div class="malla-container" id="malla">
+            <!-- Año 1 -->
+            <div class="anio-col">
+                <div class="anio-title">1º AÑO</div>
+                
+                <div class="semestre">
+                    <div class="semestre-title">SEM I</div>
+                    <div class="ramo">
+                        <div class="ramo-header">
+                            <span>Física</span>
+                            <i class="fas fa-chevron-down ramo-icon"></i>
+                        </div>
+                        <div class="ramo-content">
+                            <div class="ramo-descripcion">
+                                Estudio de los principios fundamentales de la física y su aplicación en problemas de ingeniería.
+                            </div>
+                            <div class="profesores">
+                                <div class="profesores-titulo">Profesores:</div>
+                                <div class="profesor"><i class="fas fa-user"></i> Dr. Carlos Méndez</div>
+                                <div class="profesor"><i class="fas fa-user"></i> Dra. Ana López</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="ramo">
+                        <div class="ramo-header">
+                            <span>Álgebra I Aplicada a la Ingeniería</span>
+                            <i class="fas fa-chevron-down ramo-icon"></i>
+                        </div>
+                        <div class="ramo-content">
+                            <div class="ramo-descripcion">
+                                Fundamentos del álgebra lineal y sus aplicaciones en problemas de ingeniería.
+                            </div>
+                            <div class="profesores">
+                                <div class="profesores-titulo">Profesores:</div>
+                                <div class="profesor"><i class="fas fa-user"></i> Dr. Roberto Silva</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="ramo">
+                        <div class="ramo-header">
+                            <span>Cálculo I Aplicado a la Ingeniería</span>
+                            <i class="fas fa-chevron-down ramo-icon"></i>
+                        </div>
+                        <div class="ramo-content">
+                            <div class="ramo-descripcion">
+                                Estudio del cálculo diferencial e integral con aplicaciones en problemas de ingeniería.
+                            </div>
+                            <div class="profesores">
+                                <div class="profesores-titulo">Profesores:</div>
+                                <div class="profesor"><i class="fas fa-user"></i> Dr. Fernando González</div>
+                                <div class="profesor"><i class="fas fa-user"></i> Dra. Patricia Rojas</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="ramo">
+                        <div class="ramo-header">
+                            <span>Química General I</span>
+                            <i class="fas fa-chevron-down ramo-icon"></i>
+                        </div>
+                        <div class="ramo-content">
+                            <div class="ramo-descripcion">
+                                Principios fundamentales de la química y su aplicación en procesos industriales.
+                            </div>
+                            <div class="profesores">
+                                <div class="profesores-titulo">Profesores:</div>
+                                <div class="profesor"><i class="fas fa-user"></i> Dra. Marta Contreras</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="ramo">
+                        <div class="ramo-header">
+                            <span>Planeación de Habilidades de Gestión</span>
+                            <i class="fas fa-chevron-down ramo-icon"></i>
+                        </div>
+                        <div class="ramo-content">
+                            <div class="ramo-descripcion">
+                                Desarrollo de habilidades directivas y de gestión para el ejercicio de la ingeniería industrial.
+                            </div>
+                            <div class="profesores">
+                                <div class="profesores-titulo">Profesores:</div>
+                                <div class="profesor"><i class="fas fa-user"></i> Mg. Javier Morales</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="semestre">
+                    <div class="semestre-title">SEM II</div>
+                    <div class="ramo">
+                        <div class="ramo-header">
+                            <span>Física I</span>
+                            <i class="fas fa-chevron-down ramo-icon"></i>
+                        </div>
+                        <div class="ramo-content">
+                            <div class="ramo-descripcion">
+                                Continuación del estudio de la física con énfasis en mecánica y termodinámica.
+                            </div>
+                            <div class="profesores">
+                                <div class="profesores-titulo">Profesores:</div>
+                                <div class="profesor"><i class="fas fa-user"></i> Dr. Carlos Méndez</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="ramo">
+                        <div class="ramo-header">
+                            <span>Álgebra II Aplicada a la Ingeniería</span>
+                            <i class="fas fa-chevron-down ramo-icon"></i>
+                        </div>
+                        <div class="ramo-content">
+                            <div class="ramo-descripcion">
+                                Continuación del álgebra lineal con aplicaciones avanzadas en ingeniería.
+                            </div>
+                            <div class="profesores">
+                                <div class="profesores-titulo">Profesores:</div>
+                                <div class="profesor"><i class="fas fa-user"></i> Dr. Roberto Silva</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="ramo">
+                        <div class="ramo-header">
+                            <span>Cálculo II Aplicado a la Ingeniería</span>
+                            <i class="fas fa-chevron-down ramo-icon"></i>
+                        </div>
+                        <div class="ramo-content">
+                            <div class="ramo-descripcion">
+                                Estudio de cálculo multivariable y sus aplicaciones en ingeniería.
+                            </div>
+                            <div class="profesores">
+                                <div class="profesores-titulo">Profesores:</div>
+                                <div class="profesor"><i class="fas fa-user"></i> Dr. Fernando González</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="ramo">
+                        <div class="ramo-header">
+                            <span>Programación</span>
+                            <i class="fas fa-chevron-down ramo-icon"></i>
+                        </div>
+                        <div class="ramo-content">
+                            <div class="ramo-descripcion">
+                                Fundamentos de programación y algoritmos aplicados a la solución de problemas de ingeniería.
+                            </div>
+                            <div class="profesores">
+                                <div class="profesores-titulo">Profesores:</div>
+                                <div class="profesor"><i class="fas fa-user"></i> Dr. Alejandro Pérez</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="ramo">
+                        <div class="ramo-header">
+                            <span>Introducción a la Innovación en Ingeniería</span>
+                            <i class="fas fa-chevron-down ramo-icon"></i>
+                        </div>
+                        <div class="ramo-content">
+                            <div class="ramo-descripcion">
+                                Conceptos básicos de innovación y creatividad aplicados al campo de la ingeniería.
+                            </div>
+                            <div class="profesores">
+                                <div class="profesores-titulo">Profesores:</div>
+                                <div class="profesor"><i class="fas fa-user"></i> Mg. Carolina Díaz</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Año 2 -->
+            <div class="anio-col">
+                <div class="anio-title">2º AÑO</div>
+                
+                <div class="semestre">
+                    <div class="semestre-title">SEM III</div>
+                    <div class="ramo">
+                        <div class="ramo-header">
+                            <span>Ecuaciones Diferenciales</span>
+                            <i class="fas fa-chevron-down ramo-icon"></i>
+                        </div>
+                        <div class="ramo-content">
+                            <div class="ramo-descripcion">
+                                Estudio de ecuaciones diferenciales y sus aplicaciones en modelamiento de sistemas físicos.
+                            </div>
+                            <div class="profesores">
+                                <div class="profesores-titulo">Profesores:</div>
+                                <div class="profesor"><i class="fas fa-user"></i> Dr. Manuel Rodríguez</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="ramo">
+                        <div class="ramo-header">
+                            <span>Estadística y Probabilidades</span>
+                            <i class="fas fa-chevron-down ramo-icon"></i>
+                        </div>
+                        <div class="ramo-content">
+                            <div class="ramo-descripcion">
+                                Fundamentos de estadística descriptiva e inferencial y teoría de probabilidades.
+                            </div>
+                            <div class="profesores">
+                                <div class="profesores-titulo">Profesores:</div>
+                                <div class="profesor"><i class="fas fa-user"></i> Dra. Laura Fernández</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="ramo">
+                        <div class="ramo-header">
+                            <span>Ingeniería de Datos</span>
+                            <i class="fas fa-chevron-down ramo-icon"></i>
+                        </div>
+                        <div class="ramo-content">
+                            <div class="ramo-descripcion">
+                                Técnicas de recolección, procesamiento y análisis de datos para la toma de decisiones.
+                            </div>
+                            <div class="profesores">
+                                <div class="profesores-titulo">Profesores:</div>
+                                <div class="profesor"><i class="fas fa-user"></i> Dr. Pablo Castro</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="ramo">
+                        <div class="ramo-header">
+                            <span>Inglés Comunicativo (Nivel Elemental)</span>
+                            <i class="fas fa-chevron-down ramo-icon"></i>
+                        </div>
+                        <div class="ramo-content">
+                            <div class="ramo-descripcion">
+                                Desarrollo de habilidades básicas de comunicación en inglés técnico.
+                            </div>
+                            <div class="profesores">
+                                <div class="profesores-titulo">Profesores:</div>
+                                <div class="profesor"><i class="fas fa-user"></i> Mg. Susan Miller</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="semestre">
+                    <div class="semestre-title">SEM IV</div>
+                    
+                    <div class="ramo">
+                        <div class="ramo-header">
+                            <span>Cálculo Numérico</span>
+                            <i class="fas fa-chevron-down ramo-icon"></i>
+                        </div>
+                        <div class="ramo-content">
+                            <div class="ramo-descripcion">
+                                Métodos numéricos para la resolución de problemas matemáticos en ingeniería.
+                            </div>
+                            <div class="profesores">
+                                <div class="profesores-titulo">Profesores:</div>
+                                <div class="profesor"><i class="fas fa-user"></i> Dr. Andrés Navarro</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="ramo">
+                        <div class="ramo-header">
+                            <span>Mecánica</span>
+                            <i class="fas fa-chevron-down ramo-icon"></i>
+                        </div>
+                        <div class="ramo-content">
+                            <div class="ramo-descripcion">
+                                Principios de la mecánica clásica y su aplicación en sistemas industriales.
+                            </div>
+                            <div class="profesores">
+                                <div class="profesores-titulo">Profesores:</div>
+                                <div class="profesor"><i class="fas fa-user"></i> Dr. Jorge Mendoza</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="ramo">
+                        <div class="ramo-header">
+                            <span>Termodinámica</span>
+                            <i class="fas fa-chevron-down ramo-icon"></i>
+                        </div>
+                        <div class="ramo-content">
+                            <div class="ramo-descripcion">
+                                Estudio de las leyes de la termodinámica y su aplicación en procesos industriales.
+                            </div>
+                            <div class="profesores">
+                                <div class="profesores-titulo">Profesores:</div>
+                                <div class="profesor"><i class="fas fa-user"></i> Dra. Claudia Ríos</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="ramo">
+                        <div class="ramo-header">
+                            <span>Modelación de Sistemas</span>
+                            <i class="fas fa-chevron-down ramo-icon"></i>
+                        </div>
+                        <div class="ramo-content">
+                            <div class="ramo-descripcion">
+                                Técnicas de modelación y simulación de sistemas complejos.
+                            </div>
+                            <div class="profesores">
+                                <div class="profesores-titulo">Profesores:</div>
+                                <div class="profesor"><i class="fas fa-user"></i> Dr. Sergio Ortega</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="ramo">
+                        <div class="ramo-header">
+                            <span>Complementaria I</span>
+                            <i class="fas fa-chevron-down ramo-icon"></i>
+                        </div>
+                        <div class="ramo-content">
+                            <div class="ramo-descripcion">
+                                Asignatura electiva según intereses del estudiante.
+                            </div>
+                            <div class="profesores">
+                                <div class="profesores-titulo">Profesores:</div>
+                                <div class="profesor"><i class="fas fa-user"></i> Por definir</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Año 3 -->
+            <div class="anio-col">
+                <div class="anio-title">3º AÑO</div>
+                
+                <div class="semestre">
+                    <div class="semestre-title">SEM V</div>
+                    <div class="ramo">
+                        <div class="ramo-header">
+                            <span>Mecánica de fluidos</span>
+                            <i class="fas fa-chevron-down ramo-icon"></i>
+                        </div>
+                        <div class="ramo-content">
+                            <div class="ramo-descripcion">
+                                Estudio de ecuaciones diferenciales y sus aplicaciones en modelamiento de sistemas físicos.
+                            </div>
+                            <div class="profesores">
+                                <div class="profesores-titulo">Profesores:</div>
+                                <div class="profesor"><i class="fas fa-user"></i> Dr. Enrique Wagemann</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="ramo">
+                        <div class="ramo-header">
+                            <span>Estadística y Probabilidades</span>
+                            <i class="fas fa-chevron-down ramo-icon"></i>
+                        </div>
+                        <div class="ramo-content">
+                            <div class="ramo-descripcion">
+                                Fundamentos de estadística descriptiva e inferencial y teoría de probabilidades.
+                            </div>
+                            <div class="profesores">
+                                <div class="profesores-titulo">Profesores:</div>
+                                <div class="profesor"><i class="fas fa-user"></i> Dra. Laura Fernández</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="ramo">
+                        <div class="ramo-header">
+                            <span>Ingeniería de Datos</span>
+                            <i class="fas fa-chevron-down ramo-icon"></i>
+                        </div>
+                        <div class="ramo-content">
+                            <div class="ramo-descripcion">
+                                Técnicas de recolección, procesamiento y análisis de datos para la toma de decisiones.
+                            </div>
+                            <div class="profesores">
+                                <div class="profesores-titulo">Profesores:</div>
+                                <div class="profesor"><i class="fas fa-user"></i> Dr. Pablo Castro</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="ramo">
+                        <div class="ramo-header">
+                            <span>Inglés Comunicativo (Nivel Elemental)</span>
+                            <i class="fas fa-chevron-down ramo-icon"></i>
+                        </div>
+                        <div class="ramo-content">
+                            <div class="ramo-descripcion">
+                                Desarrollo de habilidades básicas de comunicación en inglés técnico.
+                            </div>
+                            <div class="profesores">
+                                <div class="profesores-titulo">Profesores:</div>
+                                <div class="profesor"><i class="fas fa-user"></i> Mg. Susan Miller</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="semestre">
+                    <div class="semestre-title">SEM IV</div>
+                    <div class="ramo">
+                        <div class="ramo-header">
+                            <span>Mecánica de Materiales</span>
+                            <i class="fas fa-chevron-down ramo-icon"></i>
+                        </div>
+                        <div class="ramo-content">
+                            <div class="ramo-descripcion">
+                                Estudio del comportamiento de materiales sometidos a diferentes tipos de esfuerzos.
+                            </div>
+                            <div class="profesores">
+                                <div class="profesores-titulo">Profesores:</div>
+                                <div class="profesor"><i class="fas fa-user"></i> Dr. Ricardo Soto</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="ramo">
+                        <div class="ramo-header">
+                            <span>Cálculo Numérico</span>
+                            <i class="fas fa-chevron-down ramo-icon"></i>
+                        </div>
+                        <div class="ramo-content">
+                            <div class="ramo-descripcion">
+                                Métodos numéricos para la resolución de problemas matemáticos en ingeniería.
+                            </div>
+                            <div class="profesores">
+                                <div class="profesores-titulo">Profesores:</div>
+                                <div class="profesor"><i class="fas fa-user"></i> Dr. Andrés Navarro</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="ramo">
+                        <div class="ramo-header">
+                            <span>HOLANDA</span>
+                            <i class="fas fa-chevron-down ramo-icon"></i>
+                        </div>
+                        <div class="ramo-content">
+                            <div class="ramo-descripcion">
+                                Principios de la mecánica clásica y su aplicación en sistemas industriales.
+                            </div>
+                            <div class="profesores">
+                                <div class="profesores-titulo">Profesores:</div>
+                                <div class="profesor"><i class="fas fa-user"></i> Dr. Jorge Mendoza</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="ramo">
+                        <div class="ramo-header">
+                            <span>Termodinámica</span>
+                            <i class="fas fa-chevron-down ramo-icon"></i>
+                        </div>
+                        <div class="ramo-content">
+                            <div class="ramo-descripcion">
+                                Estudio de las leyes de la termodinámica y su aplicación en procesos industriales.
+                            </div>
+                            <div class="profesores">
+                                <div class="profesores-titulo">Profesores:</div>
+                                <div class="profesor"><i class="fas fa-user"></i> Dra. Claudia Ríos</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="ramo">
+                        <div class="ramo-header">
+                            <span>Modelación de Sistemas</span>
+                            <i class="fas fa-chevron-down ramo-icon"></i>
+                        </div>
+                        <div class="ramo-content">
+                            <div class="ramo-descripcion">
+                                Técnicas de modelación y simulación de sistemas complejos.
+                            </div>
+                            <div class="profesores">
+                                <div class="profesores-titulo">Profesores:</div>
+                                <div class="profesor"><i class="fas fa-user"></i> Dr. Sergio Ortega</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="ramo">
+                        <div class="ramo-header">
+                            <span>Complementaria I</span>
+                            <i class="fas fa-chevron-down ramo-icon"></i>
+                        </div>
+                        <div class="ramo-content">
+                            <div class="ramo-descripcion">
+                                Asignatura electiva según intereses del estudiante.
+                            </div>
+                            <div class="profesores">
+                                <div class="profesores-titulo">Profesores:</div>
+                                <div class="profesor"><i class="fas fa-user"></i> Por definir</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Por razones de espacio, aquí solo muestro los primeros dos años -->
+            <!-- El código completo incluiría todos los años y asignaturas -->
+            
+        </div>
+
+        <div class="controls">
+            <button id="expandAll"><i class="fas fa-expand"></i> Expandir Todo</button>
+            <button id="collapseAll"><i class="fas fa-compress"></i> Colapsar Todo</button>
+        </div>
+
+        <footer>
+            <p>Facultad de Ingeniería - Ingeniería Civil Industrial</p>
+            <p>Malla curricular actualizada - Información referencial realizada desde el centro de estudiante de ingeniería civil industrial</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Funcionalidad para expandir/colapsar ramos
+            const ramosHeaders = document.querySelectorAll('.ramo-header');
+            
+            ramosHeaders.forEach(header => {
+                header.addEventListener('click', function() {
+                    const ramo = this.parentElement;
+                    ramo.classList.toggle('open');
+                });
+            });
+            
+            // Botones para expandir/colapsar todos los ramos
+            document.getElementById('expandAll').addEventListener('click', function() {
+                document.querySelectorAll('.ramo').forEach(ramo => {
+                    ramo.classList.add('open');
+                });
+            });
+            
+            document.getElementById('collapseAll').addEventListener('click', function() {
+                document.querySelectorAll('.ramo').forEach(ramo => {
+                    ramo.classList.remove('open');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
